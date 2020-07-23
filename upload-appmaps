@@ -1,18 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Install this file to the bin directory of your project.
-# You might want to rename it upload-appmaps and set the executable bit:
-# chmod a+x bin/upload-appmaps
-
-# Invoke this script with command line options to the AppLand CLI.
-# Two typical options that you'll want to provide:
-# * -a option to specify the fully qualified org-name/app-name.
-# * Path(s) to the appmap.json files you want to upload.
-
-# Usage example:
-# ./bin/upload-appmaps -a '"org-name/project-name"' tmp/appmap/minitest
-
 def env_var(key)
   var = ENV[key]
   if var.nil? || var.empty?
@@ -64,6 +52,7 @@ end
 if ci?
   args << %w(-e ci)
   args << '--no-open'
+  args << ['-a', env_var('APPLAND_APP_NAME')] if env_var?('APPLAND_APP_NAME')
 end
 
 if ci_branch == 'master'
@@ -75,6 +64,8 @@ if ci_branch == 'master'
 end
 
 args += ARGV unless ARGV.length == 0
+
+args << 'tmp/appmap'
 
 puts args.join(' ') if debug?
 
