@@ -1,8 +1,9 @@
 dist: bionic
 
 language: ruby
+  
 rvm:
- - 2.6.3
+- 2.6.3
 
 branches:
   only:
@@ -14,9 +15,13 @@ before_install: >
   && curl -sSL "${APPLAND_CLI_DOWNLOAD_URL}" \
       | sudo tar xz --directory /usr/local/bin appland \
       && touch ~/.appland
+
+  curl -sSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/upload-appmaps \
+    | jq -r .content | base64 --decode > upload-appmaps
+
 script:
-  - bundle exec rake db:migrate
-  - APPMAP=true bundle exec rake test
+- bundle exec rake db:migrate
+- APPMAP=true bundle exec rake test
 
 after_script:
-- env DEBUG=true ruby ./bin/upload-appmaps tmp/appmap/rspec tmp/appmap/minitest tmp/appmap/cucumber
+- env DEBUG=true ruby ./upload-appmaps tmp/appmap/rspec tmp/appmap/minitest tmp/appmap/cucumber
