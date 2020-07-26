@@ -23,7 +23,7 @@ def dry_run?
 end
 
 def ci_branch
-  # In pull requests, TRAVIS_BRANCH is "master". Huh?
+  # In pull requests, TRAVIS_BRANCH is the branch the PR is targeting. 
   env_var('TRAVIS_PULL_REQUEST_BRANCH') || env_var('TRAVIS_BRANCH')
 end
 

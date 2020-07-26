@@ -14,14 +14,14 @@ before_install: >
       && touch ~/.appland
 
   export APPMAP_JAR_DOWNLOAD_URL="$(curl -s https://api.github.com/repos/applandinc/appmap-java/releases/latest \
-    | jq -r '.assets[] | select(.name | contains("java11")).browser_download_url')" \
-  && curl -o appmap-java11.jar -sSL "${APPMAP_JAR_DOWNLOAD_URL}" 
+    | jq -r '.assets[] | select(.name | contains("java8")).browser_download_url')" \
+  && curl -o appmap-java8.jar -sSL "${APPMAP_JAR_DOWNLOAD_URL}" 
     
   curl -sSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/upload-appmaps \
     | jq -r .content | base64 --decode > upload-appmaps
          
 script:
-- mvn -DargLine="-javaagent:appmap-java11.jar" test
+- mvn -DargLine="-javaagent:appmap-java8.jar" test
 
 after_script:
 - env DEBUG=true ruby ./upload-appmaps
