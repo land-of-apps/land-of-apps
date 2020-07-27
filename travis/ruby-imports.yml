@@ -1,37 +1,29 @@
 dist: bionic
 
-language: java
-
+language: ruby
+  
 branches:
   only:
   - master
   - appland
   - /appland-.*/
 
-
 before_install: |
   # Avoid scribbling on the build environment by wrapping these
   # operations in a function.
   setup_for_appmaps() {
     set -e -o pipefail
-    local APPMAP_JAVA_VERSION=java8
-    local JAVAP_VERSION=$(javap -version | cut -d. -f1,2)
-    [[ "$JAVAP_VERSION" == 11.0 ]] && APPMAP_JAVA_VERSION=java11
-
     local APPLAND_CLI_DOWNLOAD_URL="$(curl -s https://api.github.com/repos/applandinc/appland-cli/releases/latest \
       | jq -r '.assets[] | select(.name | contains("Linux")).browser_download_url')" 
     curl -sSL "${APPLAND_CLI_DOWNLOAD_URL}" \
-      | sudo tar xz --directory /usr/local/bin appland 
+      | sudo tar xz --directory /usr/local/bin appland \
     touch ~/.appland
-
-    local APPMAP_JAR_DOWNLOAD_URL="$(curl -s https://api.github.com/repos/applandinc/appmap-java/releases/latest \
-      | jq --arg java_version $APPMAP_JAVA_VERSION  -r '.assets[] | select(.name | contains($java_version)).browser_download_url')" 
-    curl -o appmap.jar -sSL "${APPMAP_JAR_DOWNLOAD_URL}" 
 
     curl -sSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/bin/upload-appmaps \
       | jq -r .content | base64 --decode > upload-appmaps
     set +e +o pipefail
   }
   setup_for_appmaps
+    
 after_script:
-- env DEBUG=true ruby ./upload-appmaps
+- env DEBUG=true ruby ./upload-appmaps tmp/appmap/rspec tmp/appmap/minitest tmp/appmap/cucumber
