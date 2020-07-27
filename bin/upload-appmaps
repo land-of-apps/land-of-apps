@@ -23,7 +23,7 @@ def dry_run?
 end
 
 def ci_branch
-  env_var('TRAVIS_PULL_REQUEST_BRANCH')
+  env_var('TRAVIS_PULL_REQUEST_BRANCH') || env_var('TRAVIS_BRANCH')
 end
 
 def ci?
