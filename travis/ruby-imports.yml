@@ -9,21 +9,10 @@ branches:
   - /appland-.*/
 
 before_install: |
-  # Avoid scribbling on the build environment by wrapping these
-  # operations in a function.
-  setup_for_appmaps() {
-    set -e -o pipefail
-    local APPLAND_CLI_DOWNLOAD_URL="$(curl -s https://api.github.com/repos/applandinc/appland-cli/releases/latest \
-      | jq -r '.assets[] | select(.name | contains("Linux")).browser_download_url')" 
-    curl -sSL "${APPLAND_CLI_DOWNLOAD_URL}" \
-      | sudo tar xz --directory /usr/local/bin appland \
-    touch ~/.appland
-
-    curl -sSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/bin/upload-appmaps \
-      | jq -r .content | base64 --decode > upload-appmaps
-    set +e +o pipefail
-  }
-  setup_for_appmaps
+  source <(curl -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/travis/utils.sh | jq -r .content | base64 --decode)
+      
+  install_cli || travis_terminate 1
+  install_upload_script || travis_terminate 1
     
 after_script:
 - env DEBUG=true ruby ./upload-appmaps tmp/appmap/rspec tmp/appmap/minitest tmp/appmap/cucumber
