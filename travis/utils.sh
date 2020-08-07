@@ -16,6 +16,7 @@
 # Thanks, bash.
 
 install_cli() (
+  [[ -v DEBUG ]] && set -x
   set -o pipefail
   APPLAND_CLI_DOWNLOAD_URL="$(curl -fsSL https://api.github.com/repos/applandinc/appland-cli/releases/latest \
     | jq -e -r '.assets[] | select(.name | contains("Linux")).browser_download_url')"
@@ -25,7 +26,7 @@ install_cli() (
   fi
 
   curl -fsSL "${APPLAND_CLI_DOWNLOAD_URL}" \
-    | tar xz --directory /usr/local/bin appland
+    | sudo tar xz --directory /usr/local/bin appland
   if [[ $? != 0 ]]; then
     echo "Failed to download appland cli from $APPLAND_CLI_DOWNLOAD_URL"
     return 1
@@ -34,6 +35,7 @@ install_cli() (
 )
 
 install_appmap_java() (
+  [[ -v DEBUG ]] && set -x
   set -o pipefail
   APPMAP_JAVA_VERSION=java8
   JAVAP_VERSION=$(javap -version | cut -d. -f1,2)
@@ -54,9 +56,10 @@ install_appmap_java() (
 )  
 
 install_upload_script() (
+  [[ -v DEBUG ]] && set -x
   set -o pipefail
   
-  curl -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/bin/upload-appmaps1 \
+  curl -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/bin/upload-appmaps \
     | jq -r .content | base64 --decode > upload-appmaps
   if [[ $? != 0 ]]; then
     echo 'Failed to download upload-appmaps script'
