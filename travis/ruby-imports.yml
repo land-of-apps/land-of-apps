@@ -7,7 +7,8 @@ branches:
   - master
   - appland
   - /appland-.*/
-
+  - travis
+  
 before_install: |
   source <(curl -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/travis/utils.sh | jq -r .content | base64 --decode)
       
