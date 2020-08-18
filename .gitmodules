@@ -1,0 +1,12 @@
+[submodule "apps/shuttle"]
+	path = apps/shuttle
+	url = git@github.com:land-of-apps/shuttle.git
+[submodule "apps/rails-auth"]
+	path = apps/rails-auth
+	url = git@github.com:land-of-apps/rails-auth.git
+[submodule "apps/cocoapods-generate"]
+	path = apps/cocoapods-generate
+	url = git@github.com:land-of-apps/cocoapods-generate.git
+[submodule "apps/xcknife"]
+	path = apps/xcknife
+	url = git@github.com:land-of-apps/xcknife.git
