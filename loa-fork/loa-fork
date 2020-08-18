@@ -1,0 +1,102 @@
+#!/usr/bin/env ruby
+
+require 'uri'
+require 'octokit'
+require 'travis'
+require 'faraday'
+require 'faraday_middleware'
+
+# Given a GH URL:
+#   * fork it to land-of-apps
+#   * Turn on issues
+#   * Create a 'Create Travis build' issue, assign it to 'Mapping Apps' project, put it in 'To Do'
+# Given a LoA URL:
+#   * Create an AppLand API key for it
+#   * Update the Travis settings for it
+#     * Set APPLAND_API_KEY, hide it
+#     * Set APPLAND_APP_NAME, don't hide it
+
+class LoaFork
+  attr_reader :github, :org, :repo_name, :url
+  attr_accessor :languages
+  
+  def initialize(org, repo_name)
+    @github = Octokit::Client.new(access_token: ENV['GITHUB_ACCESS_TOKEN'])
+    @org = org
+    @repo_name = repo_name
+    @url = ['land-of-apps',repo_name].join('/')
+  end
+
+  def orig_url
+    [org,repo_name].join('/')
+  end
+
+  def languages
+    @languages ||= github.languages(url)
+  end
+  
+  def create_fork
+    loa_repo = github.fork(orig_url, organization: 'land-of-apps')
+    languages = nil
+    10.times do
+      sleep 2
+      languages = github.languages(url) rescue nil
+      break if languages
+    end
+    $stderr.puts "Forked #{orig_url} to #{url}"
+    
+  end
+  
+  def create_build_issue
+    tag = case languages.sort_by{|k,v| -v}[0][0]
+          when :Ruby
+            'ruby'
+          when :Java
+            'java'
+          else
+            'invalid'
+          end
+    github.update_repository(url, has_issues: true)
+    issue = github.create_issue(url, 'Create Travis build', nil, labels: tag)
+    $stderr.puts "Created Travis issue labeled #{tag}"
+
+    project_id = github.org_projects('land-of-apps', accept: 'application/vnd.github.inertia-preview+json').find{|p| p[:name] == 'Mapping Apps'}[:id]
+    todo_id = github.project_columns(project_id, accept: 'application/vnd.github.inertia-preview+json').find{|c| c[:name] == 'To do'}[:id]
+    card = github.create_project_card(todo_id, content_id: issue[:id], content_type: 'Issue', accept: 'application/vnd.github.inertia-preview+json')
+    $stderr.puts 'Created "To do" card for Travis issue'
+  end
+
+  def repo_exist?
+    github.repository?(url)
+  end
+end
+
+def main
+  org,repo_name = URI.parse(ARGV[0]).path.split('/', 3)[1..-1]
+  
+  loa_fork = LoaFork.new(org,repo_name)
+
+  unless loa_fork.repo_exist?
+    loa_repo = loa_fork.create_fork
+  else
+    $stderr.puts "Found existing repo #{loa_fork.url}"
+  end
+
+  loa_fork.create_build_issue
+  
+  appland = Faraday.new('https://app.land') do |conn|
+    conn.response :json, content_type: /\bjson$/
+    conn.adapter Faraday.default_adapter
+  end
+  resp = appland.post('/api/api_keys', "description=#{loa_fork.url}", Authorization: "Bearer  #{ENV['APPLAND_API_KEY']}")
+  new_api_key = resp.body['api_key']
+  $stderr.puts 'Created app.land API key'
+  
+  travis = Travis::Client.new(uri: 'https://api.travis-ci.com', access_token: ENV['TRAVIS_ACCESS_TOKEN'])
+  env_vars = travis.repo(loa_fork.url).env_vars
+  env_vars.upsert('APPLAND_API_KEY', new_api_key, public: false)
+  env_vars.upsert('APPNAME_APP_NAME', loa_fork.url, public: true)
+  $stderr.puts 'Set Travis build variables'
+end
+
+main
