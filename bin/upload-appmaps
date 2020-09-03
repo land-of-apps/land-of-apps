@@ -55,9 +55,15 @@ else
 end
 
 
-args += ARGV unless ARGV.length == 0
+files = []
 
-args << 'tmp/appmap'
+files = ARGV unless ARGV.length == 0
+
+files << 'tmp/appmap'
+
+# This eliminates any args that don't exist. It should probably get
+# removed once the CLI no longer fails on non-existent files.
+args << Dir[*files]
 
 puts args.join(' ') if debug?
 

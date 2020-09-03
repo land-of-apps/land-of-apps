@@ -10,3 +10,87 @@
 [submodule "apps/xcknife"]
 	path = apps/xcknife
 	url = git@github.com:land-of-apps/xcknife.git
+[submodule "apps/border_patrol"]
+	path = apps/border_patrol
+	url = git@github.com:land-of-apps/border_patrol.git
+[submodule "apps/ruby-rrule"]
+	path = apps/ruby-rrule
+	url = git@github.com:land-of-apps/ruby-rrule.git
+[submodule "apps/stripe-ruby"]
+	path = apps/stripe-ruby
+	url = git@github.com:land-of-apps/stripe-ruby.git
+[submodule "apps/nokogiri"]
+	path = apps/nokogiri
+	url = git@github.com:land-of-apps/nokogiri.git
+[submodule "apps/eventmachine"]
+	path = apps/eventmachine
+	url = git@github.com:land-of-apps/eventmachine.git
+[submodule "apps/mosql"]
+	path = apps/mosql
+	url = git@github.com:land-of-apps/mosql.git
+[submodule "apps/sample_app_6th_ed"]
+	path = apps/sample_app_6th_ed
+	url = git@github.com:land-of-apps/sample_app_6th_ed.git
+[submodule "apps/spring-petclinic"]
+	path = apps/spring-petclinic
+	url = git@github.com:land-of-apps/spring-petclinic.git
+[submodule "apps/spring-boot-examples"]
+	path = apps/spring-boot-examples
+	url = git@github.com:land-of-apps/spring-boot-examples.git
+[submodule "apps/git-fastclone"]
+	path = apps/git-fastclone
+	url = git@github.com:land-of-apps/git-fastclone.git
+[submodule "apps/resque"]
+	path = apps/resque
+	url = git@github.com:land-of-apps/resque.git
+[submodule "apps/devise"]
+	path = apps/devise
+	url = git@github.com:land-of-apps/devise.git
+[submodule "apps/activeadmin"]
+	path = apps/activeadmin
+	url = git@github.com:land-of-apps/activeadmin.git
+[submodule "apps/thin"]
+	path = apps/thin
+	url = git@github.com:land-of-apps/thin.git
+[submodule "apps/credentials-plugin"]
+	path = apps/credentials-plugin
+	url = git@github.com:land-of-apps/credentials-plugin.git
+[submodule "apps/display-url-api-plugin"]
+	path = apps/display-url-api-plugin
+	url = git@github.com:land-of-apps/display-url-api-plugin.git
+[submodule "apps/junit-plugin"]
+	path = apps/junit-plugin
+	url = git@github.com:land-of-apps/junit-plugin.git
+[submodule "apps/mailer-plugin"]
+	path = apps/mailer-plugin
+	url = git@github.com:land-of-apps/mailer-plugin.git
+[submodule "apps/matrix-project-plugin"]
+	path = apps/matrix-project-plugin
+	url = git@github.com:land-of-apps/matrix-project-plugin.git
+[submodule "apps/scm-api-plugin"]
+	path = apps/scm-api-plugin
+	url = git@github.com:land-of-apps/scm-api-plugin.git
+[submodule "apps/script-security-plugin"]
+	path = apps/script-security-plugin
+	url = git@github.com:land-of-apps/script-security-plugin.git
+[submodule "apps/ssh-credentials-plugin"]
+	path = apps/ssh-credentials-plugin
+	url = git@github.com:land-of-apps/ssh-credentials-plugin.git
+[submodule "apps/workflow-api-plugin"]
+	path = apps/workflow-api-plugin
+	url = git@github.com:land-of-apps/workflow-api-plugin.git
+[submodule "apps/workflow-scm-step-plugin"]
+	path = apps/workflow-scm-step-plugin
+	url = git@github.com:land-of-apps/workflow-scm-step-plugin.git
+[submodule "apps/workflow-step-api-plugin"]
+	path = apps/workflow-step-api-plugin
+	url = git@github.com:land-of-apps/workflow-step-api-plugin.git
+[submodule "apps/httparty"]
+	path = apps/httparty
+	url = git@github.com:land-of-apps/httparty.git
+[submodule "apps/mastodon"]
+	path = apps/mastodon
+	url = git@github.com:land-of-apps/mastodon.git
+[submodule "apps/solidus"]
+	path = apps/solidus
+	url = git@github.com:land-of-apps/solidus.git
