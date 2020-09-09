@@ -21,6 +21,15 @@ class LoaFork
   attr_accessor :languages
   
   def initialize(org, repo_name)
+    stack = Faraday::RackBuilder.new do |builder|
+      builder.use Faraday::Request::Retry, exceptions: [Octokit::ServerError]
+      builder.use Octokit::Middleware::FollowRedirects
+      builder.use Octokit::Response::RaiseError
+      builder.use Octokit::Response::FeedParser
+      builder.response :logger if ENV['DEBUG']
+      builder.adapter Faraday.default_adapter
+    end
+    Octokit.middleware = stack    
     @github = Octokit::Client.new(access_token: ENV['GITHUB_ACCESS_TOKEN'])
     @org = org
     @repo_name = repo_name
@@ -43,7 +52,8 @@ class LoaFork
       languages = github.languages(url) rescue nil
       break if languages
     end
-    $stderr.puts "Forked #{orig_url} to #{url}"
+    raise 'fork not ready yet' unless languages
+    $stderr.puts "Forked #{orig_url} to #{loa_repo.ssh_url}"
     
   end
   
@@ -95,7 +105,7 @@ def main
   travis = Travis::Client.new(uri: 'https://api.travis-ci.com', access_token: ENV['TRAVIS_ACCESS_TOKEN'])
   env_vars = travis.repo(loa_fork.url).env_vars
   env_vars.upsert('APPLAND_API_KEY', new_api_key, public: false)
-  env_vars.upsert('APPNAME_APP_NAME', loa_fork.url, public: true)
+  env_vars.upsert('APPLAND_APP_NAME', loa_fork.url, public: true)
   $stderr.puts 'Set Travis build variables'
 end
 
