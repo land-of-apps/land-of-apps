@@ -94,3 +94,6 @@
 [submodule "apps/solidus"]
 	path = apps/solidus
 	url = git@github.com:land-of-apps/solidus.git
+[submodule "apps/jenkins"]
+	path = apps/jenkins
+	url = git@github.com:land-of-apps/jenkins.git
