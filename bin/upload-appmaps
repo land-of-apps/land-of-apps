@@ -38,7 +38,11 @@ end
 
 raise 'TRAVIS_PULL_REQUEST_BRANCH not set' unless ci?
 
-args = %w(appland upload)
+args = []
+
+args << %w(env APPLAND_URL='https://appland-staging.herokuapp.com') unless env_var?('APPLAND_URL')
+
+args << %w(appland upload)
 
 args << [ '-b', ci_branch ]
 
@@ -61,10 +65,14 @@ files = ARGV unless ARGV.length == 0
 
 files << 'tmp/appmap'
 
+files += env_var('EXTRA_APPMAPS').split(/\s+/) if env_var?('EXTRA_APPMAPS')
+
 # This eliminates any args that don't exist. It should probably get
 # removed once the CLI no longer fails on non-existent files.
 args << Dir[*files]
 
-puts args.join(' ') if debug?
+cmd = args.join(' ')
 
-Kernel.exec(args.join(' ')) unless dry_run?
+puts "cmd: #{cmd}" if debug?
+
+Kernel.exec(cmd) unless dry_run?
