@@ -30,10 +30,14 @@ def ci?
   !ci_branch.nil?
 end
 
+def tags?
+  !`git tag -l`.strip.empty?
+end
+
 def git_last_tag
-  tag = `git describe --tags --abbrev=0`.strip
-  puts "tag: #{tag}" if debug?
-  tag.empty? ? nil : tag
+  `git describe --tags --abbrev=0`.strip.tap do |tag|
+    puts "tag: #{tag}" if debug?
+  end if tags?
 end
 
 raise 'TRAVIS_PULL_REQUEST_BRANCH not set' unless ci?
@@ -53,7 +57,8 @@ args << ['-a', env_var('APPLAND_APP_NAME')] if env_var?('APPLAND_APP_NAME')
 if ci_branch == 'appland'
   args << %w(-v master)
 elsif ci_branch =~ /appland-.*/
-  args << ['-v', git_last_tag]
+  tag = git_last_tag
+  args << ['-v', tag ] if tag
 else
   raise 'Not on an appland branch'
 end
