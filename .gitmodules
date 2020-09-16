@@ -97,3 +97,9 @@
 [submodule "apps/jenkins"]
 	path = apps/jenkins
 	url = git@github.com:land-of-apps/jenkins.git
+[submodule "apps/redmine"]
+	path = apps/redmine
+	url = git@github.com:land-of-apps/redmine.git
+[submodule "apps/apropos"]
+	path = apps/apropos
+	url = git@github.com:land-of-apps/apropos.git
