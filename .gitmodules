@@ -103,3 +103,9 @@
 [submodule "apps/apropos"]
 	path = apps/apropos
 	url = git@github.com:land-of-apps/apropos.git
+[submodule "apps/sail"]
+	path = apps/sail
+	url = git@github.com:land-of-apps/sail.git
+[submodule "apps/refinerycms"]
+	path = apps/refinerycms
+	url = git@github.com:land-of-apps/refinerycms.git
