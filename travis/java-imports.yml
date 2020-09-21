@@ -11,7 +11,11 @@ branches:
 
 
 before_install: |
-  source <(curl -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/travis/utils.sh | jq -r .content | base64 --decode)
+  auth_arg() {
+    [[ -v GITHUB_AUTH ]] && echo "-u $GITHUB_AUTH"
+  }
+
+  source <(curl $(auth_arg) -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/travis/utils.sh | jq -r .content | base64 --decode)
       
   install_cli || travis_terminate 1
   install_appmap_java || travis_terminate 1
