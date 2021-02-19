@@ -15,6 +15,11 @@ require 'faraday_middleware'
 #   * Update the Travis settings for it
 #     * Set APPLAND_API_KEY, hide it
 #     * Set APPLAND_APP_NAME, don't hide it
+#
+# These environment variables need to be set:
+# GITHUB_ACCESS_TOKEN
+# APPLAND_API_KEY
+# TRAVIS_ACCESS_TOKEN
 
 class LoaFork
   attr_reader :github, :org, :repo_name, :url
