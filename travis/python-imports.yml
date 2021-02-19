@@ -17,7 +17,7 @@ before_install: |
 
   install_cli || travis_terminate 1
   install_upload_script || travis_terminate 1
-  python pip install appmap
+  pip install appmap
 
 after_script:
 - env DEBUG=true ruby ./upload-appmaps tmp/appmap
