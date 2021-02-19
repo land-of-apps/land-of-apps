@@ -109,3 +109,24 @@
 [submodule "apps/refinerycms"]
 	path = apps/refinerycms
 	url = git@github.com:land-of-apps/refinerycms.git
+[submodule "apps/pupilfirst"]
+	path = apps/pupilfirst
+	url = git@github.com:land-of-apps/pupilfirst.git
+[submodule "apps/WebsiteOne"]
+	path = apps/WebsiteOne
+	url = git@github.com:land-of-apps/WebsiteOne.git
+[submodule "apps/sharetribe"]
+	path = apps/sharetribe
+	url = git@github.com:land-of-apps/sharetribe.git
+[submodule "apps/blazer-dev"]
+	path = apps/blazer-dev
+	url = git@github.com:land-of-apps/blazer-dev.git
+[submodule "apps/blazer"]
+	path = apps/blazer
+	url = git@github.com:land-of-apps/blazer.git
+[submodule "apps/kafka"]
+	path = apps/kafka
+	url = git@github.com:land-of-apps/kafka.git
+[submodule "apps/STF-TruTrace"]
+	path = apps/STF-TruTrace
+	url = git@github.com:land-of-apps/STF-TruTrace.git
