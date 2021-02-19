@@ -20,4 +20,4 @@ before_install: |
   pip install appmap
 
 after_script:
-- env DEBUG=true ruby ./upload-appmaps tmp/appmap
+- env DEBUG=true ruby ./upload-appmaps tmp/appmap/pytest tmp/appmap/unittest
