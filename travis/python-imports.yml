@@ -1,0 +1,23 @@
+dist: bionic
+
+language: python
+
+branches:
+  only:
+    - master
+    - appland
+    - /appland-.*
+    - travis
+
+before_install: |
+  auth_arg() {
+    [[ -v GITHUB_AUTH ]] && echo "-u $GITHUB_AUTH"
+  }
+  source <(curl $(auth_arg) -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/travis/utils.sh | jq -r .content | base64 --decode)
+
+  install_cli || travis_terminate 1
+  install_upload_script || travis_terminate 1
+  python pip install appmap
+
+after_script:
+- env DEBUG=true ruby ./upload-appmaps tmp/appmap
