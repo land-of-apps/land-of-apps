@@ -37,28 +37,25 @@ install_cli() (
 install_appmap_java() (
   [[ -v DEBUG ]] && set -x
   set -o pipefail
-  APPMAP_JAVA_VERSION=java8
-  JAVAP_VERSION=$(javap -version | cut -d. -f1,2)
-  [[ "$JAVAP_VERSION" == 11.0 ]] && APPMAP_JAVA_VERSION=java11
 
-  APPMAP_JAR_DOWNLOAD_URL="$(curl $(auth_arg) -fsSL https://api.github.com/repos/applandinc/appmap-java/releases/latest \
-    | jq -e --arg java_version $APPMAP_JAVA_VERSION  -r '.assets[] | select(.name | contains($java_version)).browser_download_url')"
+  APPMAP_JAR_DOWNLOAD_URL="$(curl -fsSL https://api.github.com/repos/applandinc/appmap-java/releases/latest \
+    | jq -e -r '.assets[0] | select(.name).browser_download_url')"
   if [[ $? != 0 ]]; then
-    echo "Failed to find appmap jar for $APPMAP_JAVA_VERSION"
+    echo "Failed to find download URL for appmap jar"
     return 1
   fi
 
-  curl -o appmap.jar -fsSL "${APPMAP_JAR_DOWNLOAD_URL}" 
+  curl -o appmap.jar -fsSL "${APPMAP_JAR_DOWNLOAD_URL}"
   if [[ $? != 0 ]]; then
     echo "Failed to download $APPMAP_JAR_DOWNLOAD_URL"
     return 1
   fi
-)  
+)
 
 install_upload_script() (
   [[ -v DEBUG ]] && set -x
   set -o pipefail
-  
+
   curl $(auth_arg) -fsSL https://api.github.com/repos/land-of-apps/land-of-apps/contents/bin/upload-appmaps \
     | jq -r .content | base64 --decode > upload-appmaps
   if [[ $? != 0 ]]; then
